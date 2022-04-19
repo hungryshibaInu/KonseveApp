@@ -7,6 +7,7 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddItemWidget extends StatefulWidget {
@@ -111,7 +112,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                       ),
                       Form(
                         key: formKey,
-                        autovalidateMode: AutovalidateMode.disabled,
+                        autovalidateMode: AutovalidateMode.always,
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -163,6 +164,13 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                                           .secondaryText,
                                     ),
                                 keyboardType: TextInputType.name,
+                                validator: (val) {
+                                  if (val.isEmpty) {
+                                    return 'Field is required';
+                                  }
+
+                                  return null;
+                                },
                               ),
                             ),
                             Padding(
@@ -205,41 +213,59 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                                           12, 4, 12, 4),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 0, 0, 0),
-                                    child: FFButtonWidget(
-                                      onPressed: () async {
-                                        await DatePicker.showDatePicker(
-                                          context,
-                                          showTitleActions: true,
-                                          onConfirm: (date) {
-                                            setState(() => datePicked = date);
-                                          },
-                                          currentTime: getCurrentTimestamp,
-                                          minTime: getCurrentTimestamp,
-                                        );
-                                      },
-                                      text: 'Expires date',
-                                      options: FFButtonOptions(
-                                        width: 130,
-                                        height: 50,
+                                  InkWell(
+                                    onTap: () async {
+                                      await DatePicker.showDatePicker(
+                                        context,
+                                        showTitleActions: true,
+                                        onConfirm: (date) {
+                                          setState(() => datePicked = date);
+                                        },
+                                        currentTime: getCurrentTimestamp,
+                                        minTime: DateTime(0, 0, 0),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 140,
+                                      height: 50,
+                                      decoration: BoxDecoration(
                                         color:
                                             FlutterFlowTheme.of(context).cream,
-                                        textStyle: FlutterFlowTheme.of(context)
-                                            .subtitle2
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                            ),
-                                        borderSide: BorderSide(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
                                           color: FlutterFlowTheme.of(context)
                                               .mustard,
                                           width: 2,
                                         ),
-                                        borderRadius: 20,
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    10, 0, 10, 0),
+                                            child: Text(
+                                              'EXP date',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                      ),
+                                            ),
+                                          ),
+                                          FaIcon(
+                                            FontAwesomeIcons.calendar,
+                                            color: FlutterFlowTheme.of(context)
+                                                .mustard,
+                                            size: 24,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -323,11 +349,18 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                                   return;
                                 }
 
+                                if (dropDownValue == null) {
+                                  return;
+                                }
+                                if (datePicked == null) {
+                                  return;
+                                }
+
                                 final listsCreateData = createListsRecordData(
                                   itemName: textController1.text,
                                   itemCat: dropDownValue,
-                                  itemManDate: datePicked,
                                   itemDetail: textController2.text,
+                                  itemExpDate: datePicked,
                                 );
                                 await ListsRecord.collection
                                     .doc()

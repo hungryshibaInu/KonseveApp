@@ -13,7 +13,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home/home_widget.dart';
 import 'llist/llist_widget.dart';
-import 'ssssss/ssssss_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -115,7 +114,6 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'Home': HomeWidget(),
       'llist': LlistWidget(),
-      'ssssss': SsssssWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPage);
     return Scaffold(
@@ -124,7 +122,7 @@ class _NavBarPageState extends State<NavBarPage> {
         currentIndex: currentIndex,
         onTap: (i) => setState(() => _currentPage = tabs.keys.toList()[i]),
         backgroundColor: FlutterFlowTheme.of(context).mint,
-        selectedItemColor: FlutterFlowTheme.of(context).punch,
+        selectedItemColor: FlutterFlowTheme.of(context).mustard,
         unselectedItemColor: FlutterFlowTheme.of(context).cream,
         showSelectedLabels: false,
         showUnselectedLabels: true,
@@ -152,18 +150,6 @@ class _NavBarPageState extends State<NavBarPage> {
               size: 32,
             ),
             label: 'List',
-            tooltip: '',
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              FontAwesomeIcons.hotjar,
-              size: 25,
-            ),
-            activeIcon: FaIcon(
-              FontAwesomeIcons.hotjar,
-              size: 32,
-            ),
-            label: 'Home',
             tooltip: '',
           )
         ],

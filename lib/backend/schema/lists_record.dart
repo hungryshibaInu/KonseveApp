@@ -30,6 +30,10 @@ abstract class ListsRecord implements Built<ListsRecord, ListsRecordBuilder> {
   bool get itemDone;
 
   @nullable
+  @BuiltValueField(wireName: 'item_expDate')
+  DateTime get itemExpDate;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -66,6 +70,7 @@ Map<String, dynamic> createListsRecordData({
   DateTime itemManDate,
   String itemDetail,
   bool itemDone,
+  DateTime itemExpDate,
 }) =>
     serializers.toFirestore(
         ListsRecord.serializer,
@@ -74,4 +79,5 @@ Map<String, dynamic> createListsRecordData({
           ..itemCat = itemCat
           ..itemManDate = itemManDate
           ..itemDetail = itemDetail
-          ..itemDone = itemDone));
+          ..itemDone = itemDone
+          ..itemExpDate = itemExpDate));

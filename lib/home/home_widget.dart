@@ -4,7 +4,7 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_toggle_icon.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../logout/logout_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,35 +25,25 @@ class _HomeWidgetState extends State<HomeWidget> {
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).cream,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('FloatingActionButton pressed ...');
+        onPressed: () async {
+          await showModalBottomSheet(
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (context) {
+              return Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: AddItemWidget(),
+              );
+            },
+          );
         },
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+        backgroundColor: FlutterFlowTheme.of(context).punch,
         elevation: 8,
-        child: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 0,
-          buttonSize: 60,
-          fillColor: FlutterFlowTheme.of(context).punch,
-          icon: FaIcon(
-            FontAwesomeIcons.plus,
-            color: FlutterFlowTheme.of(context).cream,
-            size: 30,
-          ),
-          onPressed: () async {
-            await showModalBottomSheet(
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              context: context,
-              builder: (context) {
-                return Padding(
-                  padding: MediaQuery.of(context).viewInsets,
-                  child: AddItemWidget(),
-                );
-              },
-            );
-          },
+        child: FaIcon(
+          FontAwesomeIcons.plus,
+          color: FlutterFlowTheme.of(context).cream,
+          size: 30,
         ),
       ),
       body: SafeArea(
@@ -66,10 +56,28 @@ class _HomeWidgetState extends State<HomeWidget> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(30, 30, 0, 0),
                     child: Text(
                       'Welcome back,',
                       style: FlutterFlowTheme.of(context).title1,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(85, 25, 0, 0),
+                    child: InkWell(
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LogoutWidget(),
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Icons.settings_outlined,
+                        color: Colors.black,
+                        size: 26,
+                      ),
                     ),
                   ),
                 ],
@@ -175,14 +183,14 @@ class _HomeWidgetState extends State<HomeWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Text(
-                                    'Expires Today !',
+                                    'upcomming !',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
                                           fontFamily: 'Poppins',
                                           color: FlutterFlowTheme.of(context)
                                               .punch,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                   ),
                                   Expanded(
@@ -192,9 +200,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                                       child: StreamBuilder<List<ListsRecord>>(
                                         stream: queryListsRecord(
                                           queryBuilder: (listsRecord) =>
-                                              listsRecord.where('item_manDate',
-                                                  isEqualTo:
-                                                      getCurrentTimestamp),
+                                              listsRecord.orderBy(
+                                                  'item_expDate',
+                                                  descending: true),
+                                          limit: 3,
                                         ),
                                         builder: (context, snapshot) {
                                           // Customize what your widget looks like when it's loading.
@@ -217,50 +226,59 @@ class _HomeWidgetState extends State<HomeWidget> {
                                               snapshot.data;
                                           return Column(
                                             mainAxisSize: MainAxisSize.max,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: List.generate(
                                                 columnListsRecordList.length,
                                                 (columnIndex) {
                                               final columnListsRecord =
                                                   columnListsRecordList[
                                                       columnIndex];
-                                              return Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 5, 0, 0),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0, 0, 10, 0),
-                                                      child: Container(
-                                                        width: 2,
-                                                        height: 18,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .mustard,
+                                              return Visibility(
+                                                visible: !(columnListsRecord
+                                                        .itemDone) ??
+                                                    true,
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 5, 0, 0),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(0, 0,
+                                                                    10, 0),
+                                                        child: Container(
+                                                          width: 2,
+                                                          height: 18,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .mustard,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      columnListsRecord
-                                                          .itemName,
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyText1
-                                                          .override(
-                                                            fontFamily:
-                                                                'Poppins',
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        columnListsRecord
+                                                            .itemName,
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               );
                                             }),
@@ -313,80 +331,163 @@ class _HomeWidgetState extends State<HomeWidget> {
                     children: [
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                        child: FFButtonWidget(
-                          onPressed: () {
-                            print('Button pressed ...');
-                          },
-                          text: 'Diary product',
-                          options: FFButtonOptions(
-                            width: 130,
-                            height: 40,
+                        child: Container(
+                          width: 125,
+                          height: 65,
+                          decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context).mustard,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .subtitle2
-                                .override(
-                                  fontFamily: 'Poppins',
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 3),
+                                child: Icon(
+                                  Icons.sports_bar_outlined,
                                   color:
                                       FlutterFlowTheme.of(context).primaryText,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
+                                  size: 24,
                                 ),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            borderRadius: 12,
+                              ),
+                              Text(
+                                'Diary product',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                        child: FFButtonWidget(
-                          onPressed: () {
-                            print('Button pressed ...');
-                          },
-                          text: 'Vegetable',
-                          options: FFButtonOptions(
-                            width: 130,
-                            height: 40,
+                        child: Container(
+                          width: 125,
+                          height: 65,
+                          decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context).mint,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .subtitle2
-                                .override(
-                                  fontFamily: 'Poppins',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  fontWeight: FontWeight.w500,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                child: FaIcon(
+                                  FontAwesomeIcons.carrot,
+                                  color: Colors.black,
+                                  size: 24,
                                 ),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            borderRadius: 12,
+                              ),
+                              Text(
+                                'Vegetable',
+                                style: FlutterFlowTheme.of(context).bodyText1,
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
-                        },
-                        text: 'Meat',
-                        options: FFButtonOptions(
-                          width: 130,
-                          height: 40,
-                          color: FlutterFlowTheme.of(context).punch,
-                          textStyle: FlutterFlowTheme.of(context)
-                              .subtitle2
-                              .override(
-                                fontFamily: 'Poppins',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                fontWeight: FontWeight.w500,
-                              ),
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                        child: Container(
+                          width: 125,
+                          height: 65,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).punch,
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          borderRadius: 12,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 1),
+                                child: FaIcon(
+                                  FontAwesomeIcons.bacon,
+                                  color: Colors.black,
+                                  size: 23,
+                                ),
+                              ),
+                              Text(
+                                'Meat',
+                                style: FlutterFlowTheme.of(context).bodyText1,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                        child: Container(
+                          width: 125,
+                          height: 65,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).cyan,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 1),
+                                child: FaIcon(
+                                  FontAwesomeIcons.fish,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                child: Text(
+                                  'Seafood',
+                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                        child: Container(
+                          width: 125,
+                          height: 65,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFFC7880),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 2),
+                                child: FaIcon(
+                                  FontAwesomeIcons.cookie,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  size: 20,
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                child: Text(
+                                  'Dessert',
+                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -413,169 +514,162 @@ class _HomeWidgetState extends State<HomeWidget> {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(30, 0, 30, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      StreamBuilder<List<ListsRecord>>(
-                        stream: queryListsRecord(
-                          queryBuilder: (listsRecord) =>
-                              listsRecord.orderBy('item_manDate'),
-                        ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator(
-                                  color: FlutterFlowTheme.of(context).mint,
-                                ),
-                              ),
-                            );
-                          }
-                          List<ListsRecord> columnListsRecordList =
-                              snapshot.data;
-                          return Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: List.generate(
-                                columnListsRecordList.length, (columnIndex) {
-                              final columnListsRecord =
-                                  columnListsRecordList[columnIndex];
-                              return Visibility(
-                                visible: !(columnListsRecord.itemDone) ?? true,
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    elevation: 2,
-                                    shape: RoundedRectangleBorder(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                  child: StreamBuilder<List<ListsRecord>>(
+                    stream: queryListsRecord(
+                      queryBuilder: (listsRecord) =>
+                          listsRecord.orderBy('item_expDate'),
+                    ),
+                    builder: (context, snapshot) {
+                      // Customize what your widget looks like when it's loading.
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: CircularProgressIndicator(
+                              color: FlutterFlowTheme.of(context).mint,
+                            ),
+                          ),
+                        );
+                      }
+                      List<ListsRecord> columnListsRecordList = snapshot.data;
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: List.generate(columnListsRecordList.length,
+                              (columnIndex) {
+                            final columnListsRecord =
+                                columnListsRecordList[columnIndex];
+                            return Visibility(
+                              visible: !(columnListsRecord.itemDone) ?? true,
+                              child: Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Container(
+                                    width: 300,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    child: Container(
-                                      width: 300,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              FlutterFlowIconButton(
-                                                borderColor: Colors.transparent,
-                                                borderRadius: 30,
-                                                borderWidth: 1,
-                                                buttonSize: 3,
-                                                icon: Icon(
-                                                  Icons.add_box_outlined,
-                                                  color: Colors.black,
-                                                  size: 30,
-                                                ),
-                                                onPressed: () {
-                                                  print(
-                                                      'IconButton pressed ...');
-                                                },
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            FlutterFlowIconButton(
+                                              borderColor: Colors.transparent,
+                                              borderRadius: 30,
+                                              borderWidth: 1,
+                                              buttonSize: 3,
+                                              icon: Icon(
+                                                Icons.add_box_outlined,
+                                                color: Colors.black,
+                                                size: 30,
                                               ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                10, 0, 0, 0),
-                                                    child: ToggleIcon(
-                                                      onPressed: () async {
-                                                        final listsUpdateData =
-                                                            createListsRecordData(
-                                                          itemDone:
-                                                              !columnListsRecord
-                                                                  .itemDone,
-                                                        );
-                                                        await columnListsRecord
-                                                            .reference
-                                                            .update(
-                                                                listsUpdateData);
-                                                      },
-                                                      value: columnListsRecord
-                                                          .itemDone,
-                                                      onIcon: Icon(
-                                                        Icons.check_box,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .punch,
-                                                        size: 25,
-                                                      ),
-                                                      offIcon: Icon(
-                                                        Icons
-                                                            .check_box_outline_blank,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .punch,
-                                                        size: 25,
-                                                      ),
+                                              onPressed: () {
+                                                print('IconButton pressed ...');
+                                              },
+                                            ),
+                                            Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(10, 0, 0, 0),
+                                                  child: ToggleIcon(
+                                                    onPressed: () async {
+                                                      final listsUpdateData =
+                                                          createListsRecordData(
+                                                        itemDone:
+                                                            !columnListsRecord
+                                                                .itemDone,
+                                                      );
+                                                      await columnListsRecord
+                                                          .reference
+                                                          .update(
+                                                              listsUpdateData);
+                                                    },
+                                                    value: columnListsRecord
+                                                        .itemDone,
+                                                    onIcon: Icon(
+                                                      Icons.check_box,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .punch,
+                                                      size: 25,
+                                                    ),
+                                                    offIcon: Icon(
+                                                      Icons
+                                                          .check_box_outline_blank,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .punch,
+                                                      size: 25,
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(25, 3, 0, 0),
-                                                child: Text(
-                                                  columnListsRecord.itemName,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
                                                 ),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(25, 1, 0, 0),
+                                              child: Text(
+                                                columnListsRecord.itemName,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
                                               ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(25, 3, 0, 0),
-                                                child: Text(
-                                                  dateTimeFormat(
-                                                      'd/M/y',
-                                                      columnListsRecord
-                                                          .itemManDate),
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(25, 1, 0, 0),
+                                              child: Text(
+                                                dateTimeFormat(
+                                                    'd/M/y',
+                                                    columnListsRecord
+                                                        .itemExpDate),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryText,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
                                               ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              );
-                            }),
-                          );
-                        },
-                      ),
-                    ],
+                              ),
+                            );
+                          }),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

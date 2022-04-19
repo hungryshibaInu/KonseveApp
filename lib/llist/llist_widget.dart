@@ -1,11 +1,8 @@
-import '../auth/auth_util.dart';
-import '../flutter_flow/flutter_flow_calendar.dart';
+import '../backend/backend.dart';
+import '../components/add_item_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import '../login/login_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,167 +14,1048 @@ class LlistWidget extends StatefulWidget {
 }
 
 class _LlistWidgetState extends State<LlistWidget> {
-  DateTime datePicked;
-  DateTimeRange calendarSelectedDay;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    calendarSelectedDay = DateTimeRange(
-      start: DateTime.now().startOfDay,
-      end: DateTime.now().endOfDay,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      backgroundColor: FlutterFlowTheme.of(context).cream,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await showModalBottomSheet(
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (context) {
+              return Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: AddItemWidget(),
+              );
+            },
+          );
+        },
+        backgroundColor: FlutterFlowTheme.of(context).tertiaryColor,
+        elevation: 8,
+        child: FaIcon(
+          FontAwesomeIcons.plus,
+          color: FlutterFlowTheme.of(context).cream,
+          size: 30,
+        ),
+      ),
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FlutterFlowCalendar(
-                color: FlutterFlowTheme.of(context).primaryColor,
-                weekFormat: false,
-                weekStartsMonday: false,
-                onChange: (DateTimeRange newSelectedDate) {
-                  setState(() => calendarSelectedDay = newSelectedDate);
-                },
-                titleStyle: TextStyle(),
-                dayOfWeekStyle: TextStyle(),
-                dateStyle: TextStyle(),
-                selectedDateStyle: TextStyle(),
-                inactiveDateStyle: TextStyle(),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                    child: Text(
+                      'My Items',
+                      style: FlutterFlowTheme.of(context).title1.override(
+                            fontFamily: 'Poppins',
+                            fontSize: 30,
+                          ),
+                    ),
+                  ),
+                ],
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 8, 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.44,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: Color(0xFFCFD4DB),
-                            width: 1,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(12, 5, 12, 5),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Start Date',
-                                style: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Lexend Deca',
-                                      color: Color(0xFF57636C),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                padding: EdgeInsetsDirectional.fromSTEB(30, 35, 0, 0),
+                child: Text(
+                  'categories',
+                  style: FlutterFlowTheme.of(context).bodyText1,
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(30, 0, 30, 0),
+                  child: DefaultTabController(
+                    length: 6,
+                    initialIndex: 0,
+                    child: Column(
+                      children: [
+                        TabBar(
+                          labelColor: FlutterFlowTheme.of(context).punch,
+                          labelStyle: FlutterFlowTheme.of(context).bodyText1,
+                          indicatorColor: FlutterFlowTheme.of(context).punch,
+                          tabs: [
+                            Tab(
+                              text: 'All',
+                            ),
+                            Tab(
+                              icon: Icon(
+                                Icons.sports_bar_outlined,
+                                color: FlutterFlowTheme.of(context).mustard,
                               ),
-                              InkWell(
-                                onTap: () async {
-                                  await DatePicker.showDatePicker(
-                                    context,
-                                    showTitleActions: true,
-                                    onConfirm: (date) {
-                                      setState(() => datePicked = date);
-                                    },
-                                    currentTime: getCurrentTimestamp,
-                                    minTime: DateTime(0, 0, 0),
-                                  );
-                                },
-                                child: Icon(
-                                  Icons.date_range_outlined,
-                                  color: Color(0xFF57636C),
-                                  size: 24,
+                            ),
+                            Tab(
+                              icon: FaIcon(
+                                FontAwesomeIcons.carrot,
+                                color: FlutterFlowTheme.of(context).mint,
+                              ),
+                            ),
+                            Tab(
+                              icon: FaIcon(
+                                FontAwesomeIcons.bacon,
+                                color: FlutterFlowTheme.of(context).punch,
+                              ),
+                            ),
+                            Tab(
+                              icon: FaIcon(
+                                FontAwesomeIcons.fish,
+                                color: FlutterFlowTheme.of(context).cyan,
+                              ),
+                            ),
+                            Tab(
+                              icon: FaIcon(
+                                FontAwesomeIcons.cookie,
+                                color: Color(0xFFFC7880),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
+                                child: StreamBuilder<List<ListsRecord>>(
+                                  stream: queryListsRecord(),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircularProgressIndicator(
+                                            color: FlutterFlowTheme.of(context)
+                                                .mint,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<ListsRecord> columnListsRecordList =
+                                        snapshot.data;
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: List.generate(
+                                            columnListsRecordList.length,
+                                            (columnIndex) {
+                                          final columnListsRecord =
+                                              columnListsRecordList[
+                                                  columnIndex];
+                                          return Visibility(
+                                            visible:
+                                                !(columnListsRecord.itemDone) ??
+                                                    true,
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 0, 10),
+                                              child: Container(
+                                                width: 300,
+                                                height: 100,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    width: 2,
+                                                  ),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      20, 0, 0),
+                                                          child: Text(
+                                                            columnListsRecord
+                                                                .itemName,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(15,
+                                                                      20, 0, 0),
+                                                          child: Text(
+                                                            dateTimeFormat(
+                                                                'd/M/y',
+                                                                columnListsRecord
+                                                                    .itemExpDate),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            'Note:',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(5,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            valueOrDefault<
+                                                                String>(
+                                                              columnListsRecord
+                                                                  .itemDetail,
+                                                              '-',
+                                                            ),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
+                                child: StreamBuilder<List<ListsRecord>>(
+                                  stream: queryListsRecord(
+                                    queryBuilder: (listsRecord) =>
+                                        listsRecord.where('item_cat',
+                                            isEqualTo: 'Dairy products'),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircularProgressIndicator(
+                                            color: FlutterFlowTheme.of(context)
+                                                .mint,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<ListsRecord> columnListsRecordList =
+                                        snapshot.data;
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: List.generate(
+                                            columnListsRecordList.length,
+                                            (columnIndex) {
+                                          final columnListsRecord =
+                                              columnListsRecordList[
+                                                  columnIndex];
+                                          return Visibility(
+                                            visible:
+                                                !(columnListsRecord.itemDone) ??
+                                                    true,
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 0, 10),
+                                              child: Container(
+                                                width: 300,
+                                                height: 100,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    width: 2,
+                                                  ),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      20, 0, 0),
+                                                          child: Text(
+                                                            columnListsRecord
+                                                                .itemName,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .title1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontSize: 18,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(15,
+                                                                      20, 0, 0),
+                                                          child: Text(
+                                                            dateTimeFormat(
+                                                                'd/M/y',
+                                                                columnListsRecord
+                                                                    .itemExpDate),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            'Notes:',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(5,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            valueOrDefault<
+                                                                String>(
+                                                              columnListsRecord
+                                                                  .itemDetail,
+                                                              '-',
+                                                            ),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
+                                child: StreamBuilder<List<ListsRecord>>(
+                                  stream: queryListsRecord(
+                                    queryBuilder: (listsRecord) =>
+                                        listsRecord.where('item_cat',
+                                            isEqualTo: 'Vegetable'),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircularProgressIndicator(
+                                            color: FlutterFlowTheme.of(context)
+                                                .mint,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<ListsRecord> columnListsRecordList =
+                                        snapshot.data;
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: List.generate(
+                                            columnListsRecordList.length,
+                                            (columnIndex) {
+                                          final columnListsRecord =
+                                              columnListsRecordList[
+                                                  columnIndex];
+                                          return Visibility(
+                                            visible:
+                                                !(columnListsRecord.itemDone) ??
+                                                    true,
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 0, 10),
+                                              child: Container(
+                                                width: 300,
+                                                height: 100,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    width: 2,
+                                                  ),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      20, 0, 0),
+                                                          child: Text(
+                                                            columnListsRecord
+                                                                .itemName,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .title1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontSize: 18,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(15,
+                                                                      20, 0, 0),
+                                                          child: Text(
+                                                            dateTimeFormat(
+                                                                'd/M/y',
+                                                                columnListsRecord
+                                                                    .itemExpDate),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            'Notes:',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(5,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            valueOrDefault<
+                                                                String>(
+                                                              columnListsRecord
+                                                                  .itemDetail,
+                                                              '-',
+                                                            ),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
+                                child: StreamBuilder<List<ListsRecord>>(
+                                  stream: queryListsRecord(
+                                    queryBuilder: (listsRecord) => listsRecord
+                                        .where('item_cat', isEqualTo: 'Meat'),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircularProgressIndicator(
+                                            color: FlutterFlowTheme.of(context)
+                                                .mint,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<ListsRecord> columnListsRecordList =
+                                        snapshot.data;
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: List.generate(
+                                            columnListsRecordList.length,
+                                            (columnIndex) {
+                                          final columnListsRecord =
+                                              columnListsRecordList[
+                                                  columnIndex];
+                                          return Visibility(
+                                            visible:
+                                                !(columnListsRecord.itemDone) ??
+                                                    true,
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 0, 10),
+                                              child: Container(
+                                                width: 300,
+                                                height: 100,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    width: 2,
+                                                  ),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      20, 0, 0),
+                                                          child: Text(
+                                                            columnListsRecord
+                                                                .itemName,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .title1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontSize: 18,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(15,
+                                                                      20, 0, 0),
+                                                          child: Text(
+                                                            dateTimeFormat(
+                                                                'd/M/y',
+                                                                columnListsRecord
+                                                                    .itemExpDate),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            'Notes:',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(5,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            valueOrDefault<
+                                                                String>(
+                                                              columnListsRecord
+                                                                  .itemDetail,
+                                                              '-',
+                                                            ),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
+                                child: StreamBuilder<List<ListsRecord>>(
+                                  stream: queryListsRecord(
+                                    queryBuilder: (listsRecord) =>
+                                        listsRecord.where('item_cat',
+                                            isEqualTo: 'Seafood'),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircularProgressIndicator(
+                                            color: FlutterFlowTheme.of(context)
+                                                .mint,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<ListsRecord> columnListsRecordList =
+                                        snapshot.data;
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: List.generate(
+                                            columnListsRecordList.length,
+                                            (columnIndex) {
+                                          final columnListsRecord =
+                                              columnListsRecordList[
+                                                  columnIndex];
+                                          return Visibility(
+                                            visible:
+                                                !(columnListsRecord.itemDone) ??
+                                                    true,
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 0, 10),
+                                              child: Container(
+                                                width: 300,
+                                                height: 100,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    width: 2,
+                                                  ),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    if (!(columnListsRecord
+                                                            .itemDone) ??
+                                                        true)
+                                                      Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        25,
+                                                                        20,
+                                                                        0,
+                                                                        0),
+                                                            child: Text(
+                                                              columnListsRecord
+                                                                  .itemName,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .title1
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Poppins',
+                                                                    fontSize:
+                                                                        18,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        15,
+                                                                        20,
+                                                                        0,
+                                                                        0),
+                                                            child: Text(
+                                                              dateTimeFormat(
+                                                                  'd/M/y',
+                                                                  columnListsRecord
+                                                                      .itemExpDate),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyText1
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Poppins',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            'Notes:',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(5,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            valueOrDefault<
+                                                                String>(
+                                                              columnListsRecord
+                                                                  .itemDetail,
+                                                              '-',
+                                                            ),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
+                                child: StreamBuilder<List<ListsRecord>>(
+                                  stream: queryListsRecord(
+                                    queryBuilder: (listsRecord) =>
+                                        listsRecord.where('item_cat',
+                                            isEqualTo: 'Dessert'),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircularProgressIndicator(
+                                            color: FlutterFlowTheme.of(context)
+                                                .mint,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<ListsRecord> columnListsRecordList =
+                                        snapshot.data;
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: List.generate(
+                                            columnListsRecordList.length,
+                                            (columnIndex) {
+                                          final columnListsRecord =
+                                              columnListsRecordList[
+                                                  columnIndex];
+                                          return Visibility(
+                                            visible:
+                                                !(columnListsRecord.itemDone) ??
+                                                    true,
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 0, 10),
+                                              child: Container(
+                                                width: 300,
+                                                height: 100,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    width: 2,
+                                                  ),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      20, 0, 0),
+                                                          child: Text(
+                                                            columnListsRecord
+                                                                .itemName,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .title1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontSize: 18,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(15,
+                                                                      20, 0, 0),
+                                                          child: Text(
+                                                            dateTimeFormat(
+                                                                'd/M/y',
+                                                                columnListsRecord
+                                                                    .itemExpDate),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(25,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            'Notes:',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(5,
+                                                                      5, 0, 0),
+                                                          child: Text(
+                                                            valueOrDefault<
+                                                                String>(
+                                                              columnListsRecord
+                                                                  .itemDetail,
+                                                              '-',
+                                                            ),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.44,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: Color(0xFFCFD4DB),
-                          width: 1,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(12, 5, 12, 5),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'End Date',
-                              style: FlutterFlowTheme.of(context)
-                                  .subtitle2
-                                  .override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: Color(0xFF57636C),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                            Icon(
-                              Icons.date_range_outlined,
-                              color: Color(0xFF57636C),
-                              size: 24,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              FFButtonWidget(
-                onPressed: () async {
-                  await signOut();
-                  await Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginWidget(),
-                    ),
-                    (r) => false,
-                  );
-                },
-                text: 'Button',
-                options: FFButtonOptions(
-                  width: 130,
-                  height: 40,
-                  color: FlutterFlowTheme.of(context).primaryColor,
-                  textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                        fontFamily: 'Poppins',
-                        color: Colors.white,
-                      ),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                    width: 1,
                   ),
-                  borderRadius: 12,
                 ),
               ),
             ],
